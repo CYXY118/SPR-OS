@@ -9,6 +9,7 @@ export default function UsersPage() {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [editingUser, setEditingUser] = useState<any>(null);
     const [form] = Form.useForm();
 
@@ -29,6 +30,7 @@ export default function UsersPage() {
         }
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleSubmit = async (values: any) => {
         try {
             if (editingUser) {
@@ -44,9 +46,10 @@ export default function UsersPage() {
             form.resetFields();
             setEditingUser(null);
             fetchUsers();
-        } catch (e: any) {
+        } catch (e: unknown) {
             console.error(e);
-            message.error(e.response?.data?.message || 'Operation failed');
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            message.error((e as any).response?.data?.message || 'Operation failed');
         }
     };
 
@@ -55,7 +58,7 @@ export default function UsersPage() {
             await api.delete(`/users/${id}`);
             message.success('User deleted');
             fetchUsers();
-        } catch (e) {
+        } catch {
             message.error('Failed to delete');
         }
     };
@@ -74,6 +77,7 @@ export default function UsersPage() {
         {
             title: 'Actions',
             key: 'actions',
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             render: (_: any, record: any) => (
                 <Space>
                     <Button

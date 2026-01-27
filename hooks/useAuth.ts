@@ -7,10 +7,8 @@ export function useAuth() {
     useEffect(() => {
         const stored = localStorage.getItem('user');
         if (stored) {
-            // eslint-disable-next-line react-hooks/exhaustive-deps
             setUser(JSON.parse(stored));
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const hasRole = (roles: string[]) => {

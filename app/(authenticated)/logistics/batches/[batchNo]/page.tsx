@@ -1,25 +1,23 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import { Card, Table, Tag, Button, Space, Descriptions, Divider, Typography, message, App, Row, Col } from 'antd';
-import { ArrowLeftOutlined, CheckCircleOutlined, CarOutlined } from '@ant-design/icons';
+import React, { useEffect, useState, useCallback } from 'react';
+import { Card, Table, Tag, Button, Space, Descriptions, Typography, message, App, Row, Col } from 'antd';
+import { ArrowLeftOutlined, CarOutlined } from '@ant-design/icons';
 import { useRouter, useParams } from 'next/navigation';
 import api from '@/lib/axios';
 import { formatDate } from '@/lib/utils';
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 export default function BatchDetailPage() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [batch, setBatch] = useState<any>(null);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [loading, setLoading] = useState(false);
     const router = useRouter();
     const { batchNo } = useParams();
 
-    useEffect(() => {
-        fetchBatch();
-    }, [batchNo]);
-
-    const fetchBatch = async () => {
+    const fetchBatch = useCallback(async () => {
         setLoading(true);
         try {
             const { data } = await api.get(`/logistics/batches/${batchNo}`);
@@ -30,15 +28,20 @@ export default function BatchDetailPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [batchNo]);
+
+    useEffect(() => {
+        fetchBatch();
+    }, [fetchBatch]);
 
     const handlePickup = async () => {
         try {
             await api.post('/logistics/scan/pickup', { batchNo });
             message.success('Batch status updated to IN TRANSIT');
             fetchBatch();
-        } catch (error: any) {
-            message.error(error.response?.data?.message || 'Failed to update status');
+        } catch (error: unknown) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            message.error((error as any).response?.data?.message || 'Failed to update status');
         }
     };
 

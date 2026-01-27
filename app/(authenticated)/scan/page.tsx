@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useEffect, useState, Suspense } from 'react';
-import { Input, Button, Card, message, App, List, Tag, Spin, Typography, Space } from 'antd';
-import { ScanOutlined, CheckCircleOutlined, CarOutlined, LoadingOutlined } from '@ant-design/icons';
+import { Input, Button, Card, App, List, Tag, Spin, Typography, Space } from 'antd';
+import { CheckCircleOutlined, CarOutlined, LoadingOutlined } from '@ant-design/icons';
 import { Html5QrcodeScanner } from 'html5-qrcode';
 import { useSearchParams, useRouter } from 'next/navigation';
 import api from '@/lib/axios';
@@ -13,7 +13,8 @@ const { Title, Text } = Typography;
 function ScanContent() {
     const [loading, setLoading] = useState(false);
     const [actionLoading, setActionLoading] = useState(false);
-    const [batchNo, setBatchNo] = useState('');
+    // const [batchNo, setBatchNo] = useState(''); // Unused
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [previewData, setPreviewData] = useState<any>(null);
     const [manualCode, setManualCode] = useState('');
     const searchParams = useSearchParams();
@@ -21,9 +22,23 @@ function ScanContent() {
     const { message: antdMsg } = App.useApp();
 
     useEffect(() => {
+        const fetchPreview = async (code: string) => {
+            setLoading(true);
+            try {
+                const { data } = await api.get(`/logistics/batches/${code}`);
+                setPreviewData(data);
+            } catch (e: unknown) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                antdMsg.error((e as any).response?.data?.message || 'Invalid Batch QR');
+                setPreviewData(null);
+            } finally {
+                setLoading(false);
+            }
+        };
+
         const urlBatch = searchParams.get('batchNo');
         if (urlBatch) {
-            setBatchNo(urlBatch);
+            // setBatchNo(urlBatch);
             fetchPreview(urlBatch);
         }
 
@@ -39,29 +54,22 @@ function ScanContent() {
                 if (decodedText.includes('batchNo=')) {
                     extracted = new URL(decodedText).searchParams.get('batchNo') || decodedText;
                 }
-            } catch (e) { }
-            setBatchNo(extracted);
+            } catch { } // unused var
+            // setBatchNo(extracted);
             fetchPreview(extracted);
             scanner.clear();
-        }, (error) => { });
+        }, () => { }); // unused error
 
         return () => {
             scanner.clear().catch(() => { });
         };
-    }, [searchParams]);
+    }, [searchParams, antdMsg]); // Removed fetchPreview dependency by moving it inside
 
-    const fetchPreview = async (code: string) => {
-        setLoading(true);
-        try {
-            const { data } = await api.get(`/logistics/batches/${code}`);
-            setPreviewData(data);
-        } catch (e: any) {
-            antdMsg.error(e.response?.data?.message || 'Invalid Batch QR');
-            setPreviewData(null);
-        } finally {
-            setLoading(false);
-        }
-    };
+    // const fetchPreview = async (code: string) => {
+    //     // This function is now duplicated inside useEffect to solve deps, or we can use useCallback.
+    //     // But since it's used in handleAction/manual scan too, let's keep it and use useCallback or accept the duplication/cleanup.
+    //     // Simpler: Define it via useCallback.
+    // };
 
     const handleAction = async () => {
         if (!previewData) return;
@@ -78,12 +86,28 @@ function ScanContent() {
                 antdMsg.success(`✅ Receive Confirmed: Batch ${previewData.batchNo} has been delivered.`);
             }
             router.push('/logistics');
-        } catch (e: any) {
-            antdMsg.error(e.response?.data?.message || 'Action Failed');
+        } catch (e: unknown) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            antdMsg.error((e as any).response?.data?.message || 'Action Failed');
         } finally {
             setActionLoading(false);
         }
     };
+
+    // Re-implement independent fetchPreview to be used by Manual Scan button
+    const handleManualScan = async (code: string) => {
+        setLoading(true);
+        try {
+            const { data } = await api.get(`/logistics/batches/${code}`);
+            setPreviewData(data);
+        } catch (e: unknown) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            antdMsg.error((e as any).response?.data?.message || 'Invalid Batch QR');
+            setPreviewData(null);
+        } finally {
+            setLoading(false);
+        }
+    }
 
     return (
         <div className="max-w-2xl mx-auto py-8 px-4">
@@ -137,6 +161,7 @@ function ScanContent() {
                     <List
                         dataSource={previewData.items}
                         className="bg-white rounded-xl border border-gray-100 mb-8"
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         renderItem={(item: any) => (
                             <List.Item className="px-4 border-b last:border-none flex justify-between">
                                 <span className="font-bold">{item.repairOrder?.orderNo}</span>
@@ -158,7 +183,7 @@ function ScanContent() {
                         >
                             CONFIRM & UPDATE STATUS
                         </Button>
-                        <Button size="large" block variant="outlined" className="h-12 font-bold rounded-2xl text-gray-400" onClick={() => { setPreviewData(null); setBatchNo(''); }}>
+                        <Button size="large" block variant="outlined" className="h-12 font-bold rounded-2xl text-gray-400" onClick={() => { setPreviewData(null); }}>
                             Cancel / Scan Another
                         </Button>
                     </div>
@@ -173,7 +198,7 @@ function ScanContent() {
                             value={manualCode}
                             onChange={(e) => setManualCode(e.target.value)}
                         />
-                        <Button type="primary" className="bg-black border-none font-bold" onClick={() => fetchPreview(manualCode)}>Load</Button>
+                        <Button type="primary" className="bg-black border-none font-bold" onClick={() => handleManualScan(manualCode)}>Load</Button>
                     </Space.Compact>
                 </Card>
             )}

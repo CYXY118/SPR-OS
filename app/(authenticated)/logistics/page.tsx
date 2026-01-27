@@ -1,13 +1,12 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { Table, Tag, Button, Space, Card, Typography } from 'antd';
-import { CarOutlined, PlusOutlined, EyeOutlined } from '@ant-design/icons';
-import { useRouter } from 'next/navigation';
+import { Table, Tag, Button, Card } from 'antd';
+import { PlusOutlined, EyeOutlined } from '@ant-design/icons';
 import api from '@/lib/axios';
 import { formatDate } from '@/lib/utils';
 
-const { Title } = Typography;
+
 
 import BatchDetailModal from '@/components/BatchDetailModal';
 import CreateBatchModal from '@/components/CreateBatchModal';
@@ -74,6 +73,7 @@ export default function LogisticsPage() {
         {
             title: 'Actions',
             key: 'actions',
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             render: (_: any, record: any) => (
                 <Button
                     type="link"

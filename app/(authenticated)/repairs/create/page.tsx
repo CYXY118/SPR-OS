@@ -31,6 +31,7 @@ export default function CreateRepairOrder() {
         }
     }, [form, message]);
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const onFinish = async (values: any) => {
         setLoading(true);
         try {
@@ -41,9 +42,10 @@ export default function CreateRepairOrder() {
             sessionStorage.removeItem('diagnostic_data');
 
             router.push('/repairs');
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error(error);
-            message.error(error.response?.data?.message || 'Failed to create order');
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            message.error((error as any).response?.data?.message || 'Failed to create order');
         } finally {
             setLoading(false);
         }

@@ -30,7 +30,6 @@ export default function BatchDetailModal({ batchNo, open, onCancel }: BatchDetai
             setLoading(false);
         }
     }, [batchNo, message]);
-
     useEffect(() => {
         if (open && batchNo) {
             fetchBatch();

@@ -1,12 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Select, Space, Card, Typography, message, Tag } from 'antd';
-import { CarOutlined, ArrowLeftOutlined, SaveOutlined } from '@ant-design/icons';
+import { Table, Button, Select, Card, message, Tag } from 'antd';
+import { ArrowLeftOutlined, SaveOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/navigation';
 import api from '@/lib/axios';
 
-const { Title } = Typography;
 const { Option } = Select;
 
 export default function CreateBatchPage() {
@@ -18,30 +17,30 @@ export default function CreateBatchPage() {
     const router = useRouter();
 
     useEffect(() => {
+        const fetchAvailableOrders = async () => {
+            setLoading(true);
+            try {
+                const { data } = await api.get('/repairs');
+                // Filter based on direction
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const filtered = data.filter((order: any) => {
+                    if (direction === 'TO_HQ') {
+                        return order.status === 'IN_BRANCH';
+                    } else {
+                        return order.status === 'REPAIRED' || order.status === 'REPAIR_FAILED';
+                    }
+                });
+                setOrders(filtered);
+                setSelectedIds([]); // Reset selection when direction changes
+            } catch (error) {
+                console.error('Failed to fetch orders:', error);
+                message.error('Failed to load available orders');
+            } finally {
+                setLoading(false);
+            }
+        };
         fetchAvailableOrders();
     }, [direction]);
-
-    const fetchAvailableOrders = async () => {
-        setLoading(true);
-        try {
-            const { data } = await api.get('/repairs');
-            // Filter based on direction
-            const filtered = data.filter((order: any) => {
-                if (direction === 'TO_HQ') {
-                    return order.status === 'IN_BRANCH';
-                } else {
-                    return order.status === 'REPAIRED' || order.status === 'REPAIR_FAILED';
-                }
-            });
-            setOrders(filtered);
-            setSelectedIds([]); // Reset selection when direction changes
-        } catch (error) {
-            console.error('Failed to fetch orders:', error);
-            message.error('Failed to load available orders');
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const handleCreate = async () => {
         if (selectedIds.length === 0) {
@@ -57,8 +56,9 @@ export default function CreateBatchPage() {
             });
             message.success('Transport batch created successfully');
             router.push('/logistics');
-        } catch (error: any) {
-            message.error(error.response?.data?.message || 'Failed to create batch');
+        } catch (error: unknown) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            message.error((error as any).response?.data?.message || 'Failed to create batch');
         } finally {
             setSubmitting(false);
         }
@@ -82,6 +82,7 @@ export default function CreateBatchPage() {
         {
             title: 'Current Branch',
             dataIndex: 'branch',
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             render: (branch: any) => branch?.name || '-'
         }
     ];

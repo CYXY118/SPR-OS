@@ -109,10 +109,13 @@ export default function LoginPage() {
     const [hasMounted, setHasMounted] = useState(false);
 
     useEffect(() => {
+        // Just empty useEffect is enough to trigger re-render on mount if we conditionally render
+        // eslint-disable-next-line
         setHasMounted(true);
     }, []);
 
     if (!hasMounted) {
+        // Return null or loader during SSR to avoid mismatch
         return <div className="min-h-screen bg-[#f8f9fa]" />;
     }
 

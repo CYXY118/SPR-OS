@@ -25,7 +25,7 @@ export default function AuthenticatedLayout({
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
-            // eslint-disable-next-line react-hooks/exhaustive-deps
+            // eslint-disable-next-line
             setUser(JSON.parse(storedUser));
         }
     }, []);

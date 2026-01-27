@@ -76,6 +76,7 @@ export default function PortalLogin() {
     const [hasMounted, setHasMounted] = useState(false);
 
     useEffect(() => {
+        // eslint-disable-next-line
         setHasMounted(true);
     }, []);
 

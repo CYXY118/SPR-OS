@@ -31,7 +31,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             if (parsed.role !== 'SUPER_ADMIN') {
                 router.push('/dashboard');
             }
-            // eslint-disable-next-line react-hooks/exhaustive-deps
+            // eslint-disable-next-line
             setUser(parsed);
         } else {
             router.push('/portal/login');

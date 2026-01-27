@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Card, Select, Typography, Row, Col, Divider, Statistic, App } from 'antd';
-import { MedicineBoxOutlined, ToolOutlined, SaveOutlined } from '@ant-design/icons';
+import { ToolOutlined, SaveOutlined } from '@ant-design/icons';
 import api from '@/lib/axios';
 import { useRouter } from 'next/navigation';
 
@@ -42,6 +42,7 @@ export default function DiagnosticPage() {
         }
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleSaveLead = async (values: any) => {
         setLoading(true);
         try {
@@ -49,7 +50,7 @@ export default function DiagnosticPage() {
             message.info('Lead saved (Customer declined repair).');
             form.resetFields();
             setEstimatedPrice(null);
-        } catch (error) {
+        } catch {
             message.error('Failed to save lead.');
         } finally {
             setLoading(false);

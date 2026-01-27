@@ -37,7 +37,6 @@ export default function RepairDetailModal({ orderId, open, onCancel, onActionSuc
             setLoading(false);
         }
     }, [orderId, message]);
-
     useEffect(() => {
         if (open && orderId) {
             fetchOrder();

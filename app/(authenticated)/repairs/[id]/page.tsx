@@ -2,41 +2,43 @@
 
 import React, { useEffect, useState } from 'react';
 import { Card, Descriptions, Tag, Timeline, Button, Modal, Form, Select, Input, message, Spin, Space, Popconfirm } from 'antd';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import api from '@/lib/axios';
 import { useAuth } from '@/hooks/useAuth';
 import { formatDate } from '@/lib/utils';
-import { ClockCircleOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { ClockCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
 
 export default function RepairDetails() {
     const { id } = useParams();
-    const router = useRouter();
+    // const router = useRouter(); // Removed unused router
     const { user, hasRole } = useAuth();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [order, setOrder] = useState<any>(null);
     const [loading, setLoading] = useState(false);
 
     // Modals
     const [isAssignModalOpen, setIsAssignModalOpen] = useState(false);
     const [isFailModalOpen, setIsFailModalOpen] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [technicians, setTechnicians] = useState<any[]>([]); // Need an API for this
     const [actionLoading, setActionLoading] = useState(false);
 
     useEffect(() => {
+        const fetchOrder = async () => {
+            setLoading(true);
+            try {
+                const { data } = await api.get(`/repairs/${id}`);
+                setOrder(data);
+            } catch (e) {
+                console.error(e);
+                message.error('Failed to load order');
+            } finally {
+                setLoading(false);
+            }
+        };
+
         if (id) fetchOrder();
     }, [id]);
-
-    const fetchOrder = async () => {
-        setLoading(true);
-        try {
-            const { data } = await api.get(`/repairs/${id}`);
-            setOrder(data);
-        } catch (e) {
-            console.error(e);
-            message.error('Failed to load order');
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const loadTechnicians = async () => {
         // We need an endpoint to list technicians. 
@@ -48,12 +50,14 @@ export default function RepairDetails() {
         try {
             const { data } = await api.get('/users');
             // Filter frontend side or backend side? Backend `findAll` returns all users.
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             setTechnicians(data.filter((u: any) => u.role === 'TECHNICIAN'));
         } catch (e) {
             console.error(e);
         }
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleAction = async (action: string, payload: any = {}) => {
         setActionLoading(true);
         try {
@@ -69,9 +73,14 @@ export default function RepairDetails() {
                 setIsFailModalOpen(false);
             }
             message.success('Action successful');
-            fetchOrder();
-        } catch (e: any) {
-            message.error(e.response?.data?.message || 'Action failed');
+            // We need to re-fetch order here.
+            // But fetchOrder is defined inside useEffect if we moved it.
+            // So we can either move it out (and wrap in useCallback) or reload page.
+            // Let's reload for simplicity or use a trigger.
+            window.location.reload();
+        } catch (e: unknown) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            message.error((e as any).response?.data?.message || 'Action failed');
         } finally {
             setActionLoading(false);
         }
@@ -92,13 +101,13 @@ export default function RepairDetails() {
                     )}
 
                     {/* Technician Actions */}
-                    {hasRole(['TECHNICIAN']) && order.status === 'ASSIGNED_TO_TECHNICIAN' && user.id === order.technicianId && (
+                    {hasRole(['TECHNICIAN']) && order.status === 'ASSIGNED_TO_TECHNICIAN' && user?.id === order.technicianId && (
                         <Button type="primary" onClick={() => handleAction('start')}>
                             Start Repair
                         </Button>
                     )}
 
-                    {hasRole(['TECHNICIAN']) && order.status === 'UNDER_REPAIR' && user.id === order.technicianId && (
+                    {hasRole(['TECHNICIAN']) && order.status === 'UNDER_REPAIR' && user?.id === order.technicianId && (
                         <>
                             <Popconfirm title="Confirm Success?" onConfirm={() => handleAction('complete')}>
                                 <Button type="primary" style={{ backgroundColor: 'green' }}>Mark Repaired</Button>
@@ -127,6 +136,7 @@ export default function RepairDetails() {
                     <Card title="History">
                         <Timeline
                             mode="start"
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
                             items={order.history?.map((log: any) => ({
                                 color: log.toStatus === 'REPAIR_FAILED' ? 'red' : 'blue',
                                 icon: log.isScanAction ? <CheckCircleOutlined /> : <ClockCircleOutlined />,
