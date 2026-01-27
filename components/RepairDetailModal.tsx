@@ -17,12 +17,26 @@ interface RepairDetailModalProps {
 export default function RepairDetailModal({ orderId, open, onCancel, onActionSuccess }: RepairDetailModalProps) {
     const { user, hasRole } = useAuth();
     const { message } = App.useApp();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [order, setOrder] = useState<any>(null);
     const [loading, setLoading] = useState(false);
     const [actionLoading, setActionLoading] = useState(false);
     const [isAssignModalOpen, setIsAssignModalOpen] = useState(false);
     const [isFailModalOpen, setIsFailModalOpen] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [technicians, setTechnicians] = useState<any[]>([]);
+
+    const fetchOrder = React.useCallback(async () => {
+        setLoading(true);
+        try {
+            const { data } = await api.get(`/repairs/${orderId}`);
+            setOrder(data);
+        } catch {
+            message.error('Failed to load order');
+        } finally {
+            setLoading(false);
+        }
+    }, [orderId, message]);
 
     useEffect(() => {
         if (open && orderId) {
@@ -30,29 +44,19 @@ export default function RepairDetailModal({ orderId, open, onCancel, onActionSuc
         } else {
             setOrder(null);
         }
-    }, [open, orderId]);
-
-    const fetchOrder = async () => {
-        setLoading(true);
-        try {
-            const { data } = await api.get(`/repairs/${orderId}`);
-            setOrder(data);
-        } catch (e) {
-            message.error('Failed to load order');
-        } finally {
-            setLoading(false);
-        }
-    };
+    }, [open, orderId, fetchOrder]);
 
     const loadTechnicians = async () => {
         try {
             const { data } = await api.get('/users');
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             setTechnicians(data.filter((u: any) => u.role === 'TECHNICIAN'));
         } catch (e) {
             console.error(e);
         }
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleAction = async (action: string, payload: any = {}) => {
         setActionLoading(true);
         try {
@@ -70,8 +74,9 @@ export default function RepairDetailModal({ orderId, open, onCancel, onActionSuc
             message.success('Action successful');
             fetchOrder();
             onActionSuccess();
-        } catch (e: any) {
-            message.error(e.response?.data?.message || 'Action failed');
+        } catch (e: unknown) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            message.error((e as any).response?.data?.message || 'Action failed');
         } finally {
             setActionLoading(false);
         }

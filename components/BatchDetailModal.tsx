@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { Modal, Table, Tag, Descriptions, Button, App, Spin, Card } from 'antd';
+import React, { useEffect, useState, useCallback } from 'react';
+import { Modal, Table, Tag, Descriptions, App, Spin, Card } from 'antd';
 import { QRCodeCanvas } from 'qrcode.react';
 import api from '@/lib/axios';
 import { formatDate } from '@/lib/utils';
+import { Typography } from 'antd';
+
+const { Title } = Typography;
 
 interface BatchDetailModalProps {
     batchNo: string | null;
@@ -11,29 +14,31 @@ interface BatchDetailModalProps {
 }
 
 export default function BatchDetailModal({ batchNo, open, onCancel }: BatchDetailModalProps) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [batch, setBatch] = useState<any>(null);
     const [loading, setLoading] = useState(false);
     const { message } = App.useApp();
+
+    const fetchBatch = useCallback(async () => {
+        setLoading(true);
+        try {
+            const { data } = await api.get(`/logistics/batches/${batchNo}`);
+            setBatch(data);
+        } catch {
+            message.error('Failed to load batch details');
+        } finally {
+            setLoading(false);
+        }
+    }, [batchNo, message]);
 
     useEffect(() => {
         if (open && batchNo) {
             fetchBatch();
         }
-    }, [open, batchNo]);
-
-    const fetchBatch = async () => {
-        setLoading(true);
-        try {
-            const { data } = await api.get(`/logistics/batches/${batchNo}`);
-            setBatch(data);
-        } catch (e) {
-            message.error('Failed to load batch details');
-        } finally {
-            setLoading(false);
-        }
-    };
+    }, [open, batchNo, fetchBatch]);
 
     const columns = [
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         { title: 'Order No', dataIndex: ['repairOrder', 'orderNo'], key: 'orderNo', render: (val: any) => <span className="font-bold">{val}</span> },
         { title: 'Model', dataIndex: ['repairOrder', 'deviceModel'], key: 'deviceModel' },
         {
@@ -111,5 +116,4 @@ export default function BatchDetailModal({ batchNo, open, onCancel }: BatchDetai
     );
 }
 
-import { Typography } from 'antd';
-const { Title } = Typography;
+

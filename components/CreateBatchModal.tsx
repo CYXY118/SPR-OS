@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import { Table, Button, Select, Space, Card, Typography, App, Tag, Modal } from 'antd';
+import React, { useEffect, useState, useCallback } from 'react';
+import { Table, Button, Select, Card, App, Tag, Modal } from 'antd';
 import { SaveOutlined } from '@ant-design/icons';
 import api from '@/lib/axios';
 
@@ -21,20 +21,12 @@ export default function CreateBatchModal({ open, onCancel, onSuccess }: CreateBa
     const [submitting, setSubmitting] = useState(false);
     const { message } = App.useApp();
 
-    useEffect(() => {
-        if (open) {
-            fetchAvailableOrders();
-        } else {
-            setOrders([]);
-            setSelectedIds([]);
-        }
-    }, [open, direction]);
-
-    const fetchAvailableOrders = async () => {
+    const fetchAvailableOrders = useCallback(async () => {
         setLoading(true);
         try {
             const { data } = await api.get('/repairs');
             // Filter based on direction
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const filtered = data.filter((order: any) => {
                 if (direction === 'TO_HQ') {
                     return order.status === 'IN_BRANCH';
@@ -50,7 +42,16 @@ export default function CreateBatchModal({ open, onCancel, onSuccess }: CreateBa
         } finally {
             setLoading(false);
         }
-    };
+    }, [direction, message]);
+
+    useEffect(() => {
+        if (open) {
+            fetchAvailableOrders();
+        } else {
+            setOrders([]);
+            setSelectedIds([]);
+        }
+    }, [open, direction, fetchAvailableOrders]);
 
     const handleCreate = async () => {
         if (selectedIds.length === 0) {
@@ -66,8 +67,9 @@ export default function CreateBatchModal({ open, onCancel, onSuccess }: CreateBa
             });
             message.success('Transport batch created successfully');
             onSuccess();
-        } catch (error: any) {
-            message.error(error.response?.data?.message || 'Failed to create batch');
+        } catch (error: unknown) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            message.error((error as any).response?.data?.message || 'Failed to create batch');
         } finally {
             setSubmitting(false);
         }

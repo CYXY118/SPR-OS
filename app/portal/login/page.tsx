@@ -2,17 +2,19 @@
 
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Card, Typography, App } from 'antd';
-import { LockOutlined, UserOutlined, CrownOutlined, ArrowRightOutlined } from '@ant-design/icons';
+import { LockOutlined, UserOutlined, ArrowRightOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/navigation';
 import api from '@/lib/axios';
+import Image from 'next/image';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 function LoginForm() {
     const [loading, setLoading] = useState(false);
     const router = useRouter();
     const { message } = App.useApp();
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const onFinish = async (values: any) => {
         setLoading(true);
         try {
@@ -25,8 +27,9 @@ function LoginForm() {
             localStorage.setItem('user', JSON.stringify(data.user));
             message.success('Authorized Access: Welcome, Administrator');
             router.push('/portal/dashboard');
-        } catch (err: any) {
-            message.error(err.response?.data?.message || 'Authorization failed. Access restricted.');
+        } catch (err: unknown) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            message.error((err as any).response?.data?.message || 'Authorization failed. Access restricted.');
         } finally {
             setLoading(false);
         }
@@ -94,7 +97,7 @@ export default function PortalLogin() {
                 >
                     <div className="text-center mb-10">
                         <div className="inline-flex items-center justify-center mb-8">
-                            <img src="/logo.png" alt="SPR Logo" className="w-64 h-auto drop-shadow-xl" />
+                            <Image src="/logo.png" alt="SPR Logo" width={256} height={60} className="w-64 h-auto drop-shadow-xl" />
                         </div>
                         <div className="flex items-center justify-center">
                             <span className="h-[1px] w-4 bg-gray-200" />

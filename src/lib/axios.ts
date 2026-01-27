@@ -11,15 +11,42 @@ if (process.env.NEXT_PUBLIC_USE_MOCK === 'true') {
     console.warn('[Mock] API Mocking Enabled');
 
     // Login Mock
-    mock.onPost('/auth/login').reply(200, {
-        access_token: 'mock-jwt-token-xyz',
-        user: {
-            id: 'u1',
-            email: 'admin@spr.com',
-            role: 'admin',
-            fullName: 'Test Administrator',
-            organizations: []
+    // Login Mock
+    mock.onPost('/auth/login').reply((config) => {
+        const { username } = JSON.parse(config.data);
+        if (username === 'admin') {
+            return [200, {
+                access_token: 'mock-jwt-token-admin',
+                user: {
+                    id: 'u1',
+                    email: 'admin@spr.com',
+                    role: 'SUPER_ADMIN',
+                    fullName: 'Super Administrator',
+                    organizations: []
+                }
+            }];
+        } else if (username === 'tech') {
+            return [200, {
+                access_token: 'mock-jwt-token-tech',
+                user: {
+                    id: 'u2',
+                    email: 'tech@spr.com',
+                    role: 'TECHNICIAN',
+                    fullName: 'Technician Mike',
+                    organizations: []
+                }
+            }];
         }
+        return [200, {
+            access_token: 'mock-jwt-token-user',
+            user: {
+                id: 'u3',
+                email: 'user@spr.com',
+                role: 'USER',
+                fullName: 'Standard User',
+                organizations: []
+            }
+        }];
     });
 
     // CRM Leads Mock

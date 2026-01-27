@@ -1,0 +1,163 @@
+﻿
+> web@0.1.0 lint
+> eslint
+
+
+C:\Users\CYXY\Desktop\SPR ERP\app\(authenticated)\admin\users\page.tsx
+  12:52  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  32:41  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  47:21  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  58:18  warning  'e' is defined but never used             @typescript-eslint/no-unused-vars
+  77:25  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  77:38  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\CYXY\Desktop\SPR ERP\app\(authenticated)\diagnostic\page.tsx
+   5:10  warning  'MedicineBoxOutlined' is defined but never used  @typescript-eslint/no-unused-vars
+  45:43  error    Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  52:18  warning  'error' is defined but never used                @typescript-eslint/no-unused-vars
+
+C:\Users\CYXY\Desktop\SPR ERP\app\(authenticated)\layout.tsx
+  28:13  warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/exhaustive-deps')
+
+C:\Users\CYXY\Desktop\SPR ERP\app\(authenticated)\logistics\batches\[batchNo]\page.tsx
+   4:57  warning  'Divider' is defined but never used                                                                            @typescript-eslint/no-unused-vars
+   5:29  warning  'CheckCircleOutlined' is defined but never used                                                                @typescript-eslint/no-unused-vars
+  10:16  warning  'Text' is assigned a value but never used                                                                      @typescript-eslint/no-unused-vars
+  13:40  error    Unexpected any. Specify a different type                                                                       @typescript-eslint/no-explicit-any
+  14:12  warning  'loading' is assigned a value but never used                                                                   @typescript-eslint/no-unused-vars
+  20:8   warning  React Hook useEffect has a missing dependency: 'fetchBatch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  40:25  error    Unexpected any. Specify a different type                                                                       @typescript-eslint/no-explicit-any
+
+C:\Users\CYXY\Desktop\SPR ERP\app\(authenticated)\logistics\create\page.tsx
+   4:33  warning  'Space' is defined but never used                                                                                        @typescript-eslint/no-unused-vars
+   5:10  warning  'CarOutlined' is defined but never used                                                                                  @typescript-eslint/no-unused-vars
+   9:9   warning  'Title' is assigned a value but never used                                                                               @typescript-eslint/no-unused-vars
+  22:8   warning  React Hook useEffect has a missing dependency: 'fetchAvailableOrders'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  29:50  error    Unexpected any. Specify a different type                                                                                 @typescript-eslint/no-explicit-any
+  60:25  error    Unexpected any. Specify a different type                                                                                 @typescript-eslint/no-explicit-any
+  85:30  error    Unexpected any. Specify a different type                                                                                 @typescript-eslint/no-explicit-any
+
+C:\Users\CYXY\Desktop\SPR ERP\app\(authenticated)\logistics\page.tsx
+   4:30  warning  'Space' is defined but never used           @typescript-eslint/no-unused-vars
+   5:10  warning  'CarOutlined' is defined but never used     @typescript-eslint/no-unused-vars
+   6:10  warning  'useRouter' is defined but never used       @typescript-eslint/no-unused-vars
+  10:9   warning  'Title' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  77:25  error    Unexpected any. Specify a different type    @typescript-eslint/no-explicit-any
+  77:38  error    Unexpected any. Specify a different type    @typescript-eslint/no-explicit-any
+
+C:\Users\CYXY\Desktop\SPR ERP\app\(authenticated)\repairs\[id]\page.tsx
+    9:52  warning  'CloseCircleOutlined' is defined but never used                                                                @typescript-eslint/no-unused-vars
+   13:11  warning  'router' is assigned a value but never used                                                                    @typescript-eslint/no-unused-vars
+   15:40  error    Unexpected any. Specify a different type                                                                       @typescript-eslint/no-explicit-any
+   21:52  error    Unexpected any. Specify a different type                                                                       @typescript-eslint/no-explicit-any
+   26:8   warning  React Hook useEffect has a missing dependency: 'fetchOrder'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+   51:44  error    Unexpected any. Specify a different type                                                                       @typescript-eslint/no-explicit-any
+   57:58  error    Unexpected any. Specify a different type                                                                       @typescript-eslint/no-explicit-any
+   73:21  error    Unexpected any. Specify a different type                                                                       @typescript-eslint/no-explicit-any
+  130:61  error    Unexpected any. Specify a different type                                                                       @typescript-eslint/no-explicit-any
+
+C:\Users\CYXY\Desktop\SPR ERP\app\(authenticated)\repairs\create\page.tsx
+  34:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  44:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\CYXY\Desktop\SPR ERP\app\(authenticated)\repairs\page.tsx
+  6:10  warning  'useRouter' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\CYXY\Desktop\SPR ERP\app\(authenticated)\scan\page.tsx
+    4:31  warning  'message' is defined but never used                                                                              @typescript-eslint/no-unused-vars
+    5:10  warning  'ScanOutlined' is defined but never used                                                                         @typescript-eslint/no-unused-vars
+   16:12  warning  'batchNo' is assigned a value but never used                                                                     @typescript-eslint/no-unused-vars
+   17:52  error    Unexpected any. Specify a different type                                                                         @typescript-eslint/no-explicit-any
+   42:22  warning  'e' is defined but never used                                                                                    @typescript-eslint/no-unused-vars
+   46:13  warning  'error' is defined but never used                                                                                @typescript-eslint/no-unused-vars
+   51:8   warning  React Hook useEffect has a missing dependency: 'fetchPreview'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+   58:21  error    Unexpected any. Specify a different type                                                                         @typescript-eslint/no-explicit-any
+   81:21  error    Unexpected any. Specify a different type                                                                         @typescript-eslint/no-explicit-any
+  140:44  error    Unexpected any. Specify a different type                                                                         @typescript-eslint/no-explicit-any
+
+C:\Users\CYXY\Desktop\SPR ERP\app\login\page.tsx
+  112:9  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\CYXY\Desktop\SPR ERP\app\login\page.tsx:112:9
+  110 |
+  111 |     useEffect(() => {
+> 112 |         setHasMounted(true);
+      |         ^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  113 |     }, []);
+  114 |
+  115 |     if (!hasMounted) {  react-hooks/set-state-in-effect
+
+C:\Users\CYXY\Desktop\SPR ERP\app\portal\branches\page.tsx
+   4:64  warning  'Card' is defined but never used                                                                                  @typescript-eslint/no-unused-vars
+  12:56  error    Unexpected any. Specify a different type                                                                          @typescript-eslint/no-explicit-any
+  18:8   warning  React Hook useEffect has a missing dependency: 'fetchBranches'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  25:18  warning  'e' is defined but never used                                                                                     @typescript-eslint/no-unused-vars
+  32:41  error    Unexpected any. Specify a different type                                                                          @typescript-eslint/no-explicit-any
+  45:21  error    Unexpected any. Specify a different type                                                                          @typescript-eslint/no-explicit-any
+  55:18  warning  'e' is defined but never used                                                                                     @typescript-eslint/no-unused-vars
+  65:25  error    Unexpected any. Specify a different type                                                                          @typescript-eslint/no-explicit-any
+  65:34  error    Unexpected any. Specify a different type                                                                          @typescript-eslint/no-explicit-any
+  71:44  error    Unexpected any. Specify a different type                                                                          @typescript-eslint/no-explicit-any
+  89:25  error    Unexpected any. Specify a different type                                                                          @typescript-eslint/no-explicit-any
+  89:38  error    Unexpected any. Specify a different type                                                                          @typescript-eslint/no-explicit-any
+
+C:\Users\CYXY\Desktop\SPR ERP\app\portal\layout.tsx
+  34:13  warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/exhaustive-deps')
+
+C:\Users\CYXY\Desktop\SPR ERP\app\portal\login\page.tsx
+   5:38  warning  'CrownOutlined' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+   9:9   warning  'Title' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+  16:37  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         @typescript-eslint/no-explicit-any
+  28:23  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         @typescript-eslint/no-explicit-any
+  76:9   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\CYXY\Desktop\SPR ERP\app\portal\login\page.tsx:76:9
+  74 |
+  75 |     useEffect(() => {
+> 76 |         setHasMounted(true);
+     |         ^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  77 |     }, []);
+  78 |
+  79 |     if (!hasMounted) {  react-hooks/set-state-in-effect
+  97:29  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          @next/next/no-img-element
+
+C:\Users\CYXY\Desktop\SPR ERP\app\portal\users\page.tsx
+    5:10  warning  'PlusOutlined' is defined but never used                                                                       @typescript-eslint/no-unused-vars
+   12:52  error    Unexpected any. Specify a different type                                                                       @typescript-eslint/no-explicit-any
+   17:46  error    Unexpected any. Specify a different type                                                                       @typescript-eslint/no-explicit-any
+   23:8   warning  React Hook useEffect has a missing dependency: 'fetchUsers'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+   30:18  warning  'e' is defined but never used                                                                                  @typescript-eslint/no-unused-vars
+   41:18  warning  'e' is defined but never used                                                                                  @typescript-eslint/no-unused-vars
+   46:41  error    Unexpected any. Specify a different type                                                                       @typescript-eslint/no-explicit-any
+   62:21  error    Unexpected any. Specify a different type                                                                       @typescript-eslint/no-explicit-any
+   72:18  warning  'e' is defined but never used                                                                                  @typescript-eslint/no-unused-vars
+   82:25  error    Unexpected any. Specify a different type                                                                       @typescript-eslint/no-explicit-any
+   82:34  error    Unexpected any. Specify a different type                                                                       @typescript-eslint/no-explicit-any
+  101:30  error    Unexpected any. Specify a different type                                                                       @typescript-eslint/no-explicit-any
+  106:25  error    Unexpected any. Specify a different type                                                                       @typescript-eslint/no-explicit-any
+  106:38  error    Unexpected any. Specify a different type                                                                       @typescript-eslint/no-explicit-any
+  125:44  error    Unexpected any. Specify a different type                                                                       @typescript-eslint/no-explicit-any
+  199:51  error    Unexpected any. Specify a different type                                                                       @typescript-eslint/no-explicit-any
+
+C:\Users\CYXY\Desktop\SPR ERP\components\RepairDetailModal.tsx
+  141:73  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\CYXY\Desktop\SPR ERP\hooks\useAuth.ts
+  10:13  warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/exhaustive-deps')
+  13:9   warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/exhaustive-deps')
+
+鉁?91 problems (49 errors, 42 warnings)
+  0 errors and 4 warnings potentially fixable with the `--fix` option.
+

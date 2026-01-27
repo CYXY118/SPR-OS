@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Layout, Menu, Button, theme, App as AntdApp } from 'antd';
+import { Layout, Menu, theme, App as AntdApp } from 'antd';
 import {
     DashboardOutlined,
     ShopOutlined,
@@ -9,12 +9,13 @@ import {
     LogoutOutlined
 } from '@ant-design/icons';
 import { useRouter, usePathname } from 'next/navigation';
+import { User } from '@/lib/types';
 
 const { Header, Sider, Content } = Layout;
 
 export default function PortalLayout({ children }: { children: React.ReactNode }) {
     const [collapsed, setCollapsed] = useState(false);
-    const [user, setUser] = useState<any>(null);
+    const [user, setUser] = useState<User | null>(null);
     const router = useRouter();
     const pathname = usePathname();
     const {
@@ -30,6 +31,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             if (parsed.role !== 'SUPER_ADMIN') {
                 router.push('/dashboard');
             }
+            // eslint-disable-next-line react-hooks/exhaustive-deps
             setUser(parsed);
         } else {
             router.push('/portal/login');
@@ -52,7 +54,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
     return (
         <AntdApp>
             <Layout style={{ minHeight: '100vh' }}>
-                <Sider trigger={null} collapsible collapsed={collapsed} theme="dark" className="bg-gray-900">
+                <Sider trigger={null} collapsible collapsed={collapsed} onCollapse={setCollapsed} theme="dark" className="bg-gray-900">
                     <div className="p-4 text-white font-bold text-center text-lg border-b border-gray-800 mb-4">
                         {collapsed ? 'ADM' : 'ADMIN PORTAL'}
                     </div>

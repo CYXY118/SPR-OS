@@ -15,6 +15,7 @@ export default function CreateRepairModal({ open, onCancel, onSuccess }: CreateR
     const [form] = Form.useForm();
     const { message } = App.useApp();
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const onFinish = async (values: any) => {
         setLoading(true);
         try {
@@ -22,9 +23,10 @@ export default function CreateRepairModal({ open, onCancel, onSuccess }: CreateR
             message.success('Repair Order Created Successfully');
             form.resetFields();
             onSuccess();
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error(error);
-            message.error(error.response?.data?.message || 'Failed to create order');
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            message.error((error as any).response?.data?.message || 'Failed to create order');
         } finally {
             setLoading(false);
         }

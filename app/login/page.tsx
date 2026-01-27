@@ -5,6 +5,7 @@ import { Form, Input, Button, Card, Typography, App } from 'antd';
 import { UserOutlined, LockOutlined, ArrowRightOutlined } from '@ant-design/icons';
 import api from '@/lib/axios';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 const { Title, Text } = Typography;
 
@@ -13,6 +14,7 @@ const LoginContent = () => {
     const router = useRouter();
     const { message } = App.useApp();
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const onFinish = async (values: any) => {
         setLoading(true);
         try {
@@ -21,9 +23,10 @@ const LoginContent = () => {
             localStorage.setItem('user', JSON.stringify(data.user));
             message.success('Welcome back, ' + data.user.fullName);
             router.push('/diagnostic');
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error(err);
-            message.error(err.response?.data?.message || 'Login failed. Please check your credentials.');
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            message.error((err as any).response?.data?.message || 'Login failed. Please check your credentials.');
         } finally {
             setLoading(false);
         }
@@ -41,7 +44,7 @@ const LoginContent = () => {
             >
                 <div className="text-center mb-10">
                     <div className="inline-flex items-center justify-center mb-6">
-                        <img src="/logo.png" alt="SPR Logo" className="w-56 h-auto drop-shadow-md" />
+                        <Image src="/logo.png" alt="SPR Logo" width={224} height={80} className="w-56 h-auto drop-shadow-md" />
                     </div>
                     <Title level={4} className="m-0 tracking-[0.2em] font-black text-gray-800 border-none uppercase">
                         Internal Management

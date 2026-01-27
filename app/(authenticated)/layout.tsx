@@ -1,17 +1,15 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Layout, Menu, Button, theme, App as AntdApp } from 'antd';
+import { Layout, Menu, theme, App as AntdApp } from 'antd';
 import {
-    DashboardOutlined,
     ToolOutlined,
     CarOutlined,
-    QrcodeOutlined,
-    UserOutlined,
     LogoutOutlined,
     MedicineBoxOutlined
 } from '@ant-design/icons';
 import { useRouter, usePathname } from 'next/navigation';
+import { User } from '@/lib/types';
 
 const { Header, Sider, Content } = Layout;
 
@@ -21,12 +19,13 @@ export default function AuthenticatedLayout({
     children: React.ReactNode;
 }) {
     const [collapsed, setCollapsed] = useState(false);
-    const [user, setUser] = useState<any>(null);
+    const [user, setUser] = useState<User | null>(null);
     const router = useRouter();
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
+            // eslint-disable-next-line react-hooks/exhaustive-deps
             setUser(JSON.parse(storedUser));
         }
     }, []);
@@ -44,7 +43,7 @@ export default function AuthenticatedLayout({
     return (
         <AntdApp>
             <Layout style={{ minHeight: '100vh' }}>
-                <Sider trigger={null} collapsible collapsed={collapsed} theme="light">
+                <Sider trigger={null} collapsible collapsed={collapsed} onCollapse={setCollapsed} theme="light">
                     <div className="demo-logo-vertical" style={{ height: 64, margin: 16, background: '#E60000', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold' }}>
                         {collapsed ? 'SPR' : 'SPR ERP'}
                     </div>
