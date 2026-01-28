@@ -107,7 +107,8 @@ export default function CreateBatchModal({ open, onCancel, onSuccess }: CreateBa
             open={open}
             onCancel={onCancel}
             footer={null}
-            width={850}
+            width="100%"
+            style={{ maxWidth: '850px', top: '20px' }}
             destroyOnHidden
         >
             <div className="mt-6">

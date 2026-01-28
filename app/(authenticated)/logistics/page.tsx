@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { Table, Tag, Button, Card } from 'antd';
+import { Table, Tag, Button, Card, Grid, List, Space } from 'antd';
 import { PlusOutlined, EyeOutlined } from '@ant-design/icons';
 import api from '@/lib/axios';
 import { formatDate } from '@/lib/utils';
@@ -18,6 +18,7 @@ export default function LogisticsPage() {
     // Modal states
     const [selectedBatchNo, setSelectedBatchNo] = useState<string | null>(null);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const screens = Grid.useBreakpoint();
 
     useEffect(() => {
         fetchBatches();
@@ -112,7 +113,44 @@ export default function LogisticsPage() {
                     rowKey="id"
                     loading={loading}
                     pagination={{ pageSize: 12 }}
+                    className="hidden md:block"
+                    style={{ display: screens.xs ? 'none' : 'block' }}
                 />
+
+                {/* Mobile View */}
+                {screens.xs && (
+                    <List
+                        dataSource={batches}
+                        loading={loading}
+                        renderItem={(batch: any) => (
+                            <List.Item>
+                                <Card
+                                    hoverable
+                                    onClick={() => setSelectedBatchNo(batch.batchNo)}
+                                    className="w-full shadow-sm border-gray-100 mb-2"
+                                    size="small"
+                                    title={<span className="font-bold">{batch.batchNo}</span>}
+                                    extra={
+                                        <Tag color={batch.direction === 'TO_HQ' ? 'orange' : 'blue'}>
+                                            {batch.direction === 'TO_HQ' ? 'TO HQ' : 'TO BRANCH'}
+                                        </Tag>
+                                    }
+                                >
+                                    <div className="flex flex-col gap-1">
+                                        <div className="flex justify-between">
+                                            <span className="text-gray-500">Status:</span>
+                                            <Tag color={batch.status === 'RECEIVED' ? 'success' : 'processing'}>{batch.status}</Tag>
+                                        </div>
+                                        <div className="flex justify-between">
+                                            <span className="text-gray-500">Date:</span>
+                                            <span className="text-xs text-gray-400 mt-1">{formatDate(batch.createdAt)}</span>
+                                        </div>
+                                    </div>
+                                </Card>
+                            </List.Item>
+                        )}
+                    />
+                )}
             </Card>
 
             <BatchDetailModal

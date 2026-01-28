@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { Table, Tag, Button, Card, Space, Input } from 'antd';
+import { Table, Tag, Button, Card, Space, Input, Grid, List } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
 import api from '@/lib/axios';
 import { formatDate } from '@/lib/utils';
@@ -25,6 +25,7 @@ export default function RepairsList() {
     const [data, setData] = useState<RepairOrder[]>([]);
     const [loading, setLoading] = useState(false);
     const [searchText, setSearchText] = useState('');
+    const screens = Grid.useBreakpoint();
 
     // Modal states
     const [selectedOrderId, setSelectedOrderId] = useState<number | null>(null);
@@ -146,7 +147,44 @@ export default function RepairsList() {
                     rowKey="id"
                     loading={loading}
                     pagination={{ pageSize: 12 }}
+                    className="hidden md:block" // Hide on mobile via CSS as fallback/assist
+                    style={{ display: screens.xs ? 'none' : 'block' }}
                 />
+
+                {/* Mobile View */}
+                {screens.xs && (
+                    <List
+                        dataSource={filteredData}
+                        loading={loading}
+                        renderItem={(item) => (
+                            <List.Item>
+                                <Card
+                                    hoverable
+                                    onClick={() => setSelectedOrderId(item.id)}
+                                    className="w-full shadow-sm border-gray-100 mb-2"
+                                    size="small"
+                                    title={<span className="font-bold">#{item.orderNo}</span>}
+                                    extra={<Tag color={getStatusColor(item.status)}>{item.status.replace(/_/g, ' ')}</Tag>}
+                                >
+                                    <div className="flex flex-col gap-1">
+                                        <div className="flex justify-between">
+                                            <span className="text-gray-500">Device:</span>
+                                            <span className="font-medium">{item.deviceModel}</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                            <span className="text-gray-500">Branch:</span>
+                                            <span>{item.branch?.name}</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                            <span className="text-gray-500">Date:</span>
+                                            <span className="text-xs text-gray-400 mt-1">{formatDate(item.createdAt)}</span>
+                                        </div>
+                                    </div>
+                                </Card>
+                            </List.Item>
+                        )}
+                    />
+                )}
             </Card>
 
             {/* Modals */}

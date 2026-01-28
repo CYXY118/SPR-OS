@@ -87,7 +87,8 @@ export default function RepairDetailModal({ orderId, open, onCancel, onActionSuc
             open={open}
             onCancel={onCancel}
             footer={null}
-            width={850}
+            width="100%"
+            style={{ maxWidth: '850px', top: '20px' }}
             destroyOnHidden
         >
             {loading ? (

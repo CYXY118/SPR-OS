@@ -54,7 +54,8 @@ export default function BatchDetailModal({ batchNo, open, onCancel }: BatchDetai
             open={open}
             onCancel={onCancel}
             footer={null}
-            width={800}
+            width="100%"
+            style={{ maxWidth: '800px', top: '20px' }}
             destroyOnHidden
         >
             {loading ? (
