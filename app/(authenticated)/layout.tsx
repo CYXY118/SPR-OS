@@ -1,12 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Layout, Menu, theme, App as AntdApp } from 'antd';
+import { Layout, Menu, theme, App as AntdApp, Button } from 'antd';
 import {
     ToolOutlined,
     CarOutlined,
     LogoutOutlined,
-    MedicineBoxOutlined
+    MedicineBoxOutlined,
+    MenuFoldOutlined,
+    MenuUnfoldOutlined
 } from '@ant-design/icons';
 import { useRouter, usePathname } from 'next/navigation';
 import { User } from '@/lib/types';
@@ -43,7 +45,15 @@ export default function AuthenticatedLayout({
     return (
         <AntdApp>
             <Layout style={{ minHeight: '100vh' }}>
-                <Sider trigger={null} collapsible collapsed={collapsed} onCollapse={setCollapsed} theme="light">
+                <Sider
+                    trigger={null}
+                    collapsible
+                    collapsed={collapsed}
+                    onCollapse={setCollapsed}
+                    theme="light"
+                    breakpoint="lg"
+                    collapsedWidth="0"
+                >
                     <div className="demo-logo-vertical" style={{ height: 64, margin: 16, background: '#E60000', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold' }}>
                         {collapsed ? 'SPR' : 'SPR ERP'}
                     </div>
@@ -81,8 +91,18 @@ export default function AuthenticatedLayout({
                     />
                 </Sider>
                 <Layout>
-                    <Header style={{ padding: 0, background: colorBgContainer, display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingRight: 24, paddingLeft: 24 }}>
+                    <Header style={{ padding: 0, background: colorBgContainer, display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingRight: 24, paddingLeft: 16 }}>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <Button
+                                type="text"
+                                icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                                onClick={() => setCollapsed(!collapsed)}
+                                style={{
+                                    fontSize: '16px',
+                                    width: 64,
+                                    height: 64,
+                                }}
+                            />
                             {user && (
                                 <div style={{ fontWeight: '600', color: '#555', fontSize: '14px' }}>
                                     Current ID: <span style={{ color: '#E60000' }}>{user.fullName}</span>

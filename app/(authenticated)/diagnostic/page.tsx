@@ -94,12 +94,12 @@ export default function DiagnosticPage() {
                         >
                             <Divider>Customer Details</Divider>
                             <Row gutter={16}>
-                                <Col span={12}>
+                                <Col xs={24} sm={12}>
                                     <Form.Item name="customerName" label="Full Name" rules={[{ required: true }]}>
                                         <Input placeholder="John Doe" />
                                     </Form.Item>
                                 </Col>
-                                <Col span={12}>
+                                <Col xs={24} sm={12}>
                                     <Form.Item name="customerContact" label="Contact Number" rules={[{ required: true }]}>
                                         <Input placeholder="+1 234 567 890" />
                                     </Form.Item>
@@ -113,7 +113,8 @@ export default function DiagnosticPage() {
 
                             <Divider>Device Details</Divider>
                             <Row gutter={16}>
-                                <Col span={12}>
+
+                                <Col xs={24} sm={12}>
                                     <Form.Item name="deviceModel" label="Device Model" rules={[{ required: true }]}>
                                         <Select placeholder="Select Model">
                                             <Option value="iPhone 13">iPhone 13</Option>
@@ -123,7 +124,7 @@ export default function DiagnosticPage() {
                                         </Select>
                                     </Form.Item>
                                 </Col>
-                                <Col span={12}>
+                                <Col xs={24} sm={12}>
                                     <Form.Item name="issueType" label="Issue / Fault" rules={[{ required: true }]}>
                                         <Select placeholder="Select Issue">
                                             <Option value="Screen Crack">Screen Crack</Option>
