@@ -108,8 +108,7 @@ export default function AuthenticatedLayout({
                     placement="left"
                     onClose={() => setDrawerOpen(false)}
                     open={drawerOpen}
-                    width={220}
-                    styles={{ body: { padding: 0 } }}
+                    styles={{ body: { padding: 0 }, wrapper: { width: 220 } }}
                     closable={false}
                 >
                     {siderContent}
