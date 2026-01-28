@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { Table, Tag, Button, Card, Space, Input, Grid, List } from 'antd';
+import { Table, Tag, Button, Card, Input, Grid } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
 import api from '@/lib/axios';
 import { formatDate } from '@/lib/utils';
 import { ColumnType } from 'antd/es/table';
+import RepairDetailModal from '@/components/RepairDetailModal';
 
 interface RepairOrder {
     id: number;
@@ -18,16 +19,13 @@ interface RepairOrder {
     createdAt: string;
 }
 
-
-import RepairDetailModal from '@/components/RepairDetailModal';
-
 export default function RepairsList() {
     const [data, setData] = useState<RepairOrder[]>([]);
     const [loading, setLoading] = useState(false);
     const [searchText, setSearchText] = useState('');
     const screens = Grid.useBreakpoint();
+    const isMobile = !screens.md;
 
-    // Modal states
     const [selectedOrderId, setSelectedOrderId] = useState<number | null>(null);
 
     const fetchRepairs = async () => {
@@ -100,16 +98,13 @@ export default function RepairsList() {
             title: 'Action',
             key: 'action',
             render: (_, record) => (
-                <Space size="middle">
-                    <Button
-                        type="link"
-                        icon={<EyeOutlined />}
-                        onClick={() => setSelectedOrderId(record.id)}
-                        className="text-blue-600 font-medium"
-                    >
-                        View
-                    </Button>
-                </Space>
+                <Button
+                    type="link"
+                    icon={<EyeOutlined />}
+                    onClick={() => setSelectedOrderId(record.id)}
+                >
+                    View
+                </Button>
             ),
         },
     ];
@@ -125,70 +120,72 @@ export default function RepairsList() {
 
     return (
         <div suppressHydrationWarning>
-            <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold">Repair Orders</h2>
-                <Space size="large">
-                    <Input.Search
-                        placeholder="Search order no or device..."
-                        allowClear
-                        onSearch={(value) => setSearchText(value)}
-                        onChange={(e) => setSearchText(e.target.value)}
-                        style={{ width: 340 }}
-                        className="rounded-lg"
-                    />
-
-                </Space>
+            {/* Page Header - stacks on mobile */}
+            <div className={`mb-4 ${isMobile ? '' : 'flex justify-between items-center mb-6'}`}>
+                <h2 className={`font-bold m-0 ${isMobile ? 'text-xl mb-3' : 'text-2xl'}`}>Repair Orders</h2>
+                <Input.Search
+                    placeholder="Search..."
+                    allowClear
+                    onSearch={(value) => setSearchText(value)}
+                    onChange={(e) => setSearchText(e.target.value)}
+                    style={{ width: isMobile ? '100%' : 300 }}
+                />
             </div>
 
-            <Card className="shadow-sm rounded-xl border-gray-100">
-                <Table
-                    columns={columns}
-                    dataSource={filteredData}
-                    rowKey="id"
-                    loading={loading}
-                    pagination={{ pageSize: 12 }}
-                    className="hidden md:block" // Hide on mobile via CSS as fallback/assist
-                    style={{ display: screens.xs ? 'none' : 'block' }}
-                />
-
-                {/* Mobile View */}
-                {screens.xs && (
-                    <List
+            {/* Desktop Table */}
+            {!isMobile && (
+                <Card className="shadow-sm rounded-xl border-gray-100">
+                    <Table
+                        columns={columns}
                         dataSource={filteredData}
+                        rowKey="id"
                         loading={loading}
-                        renderItem={(item) => (
-                            <List.Item>
-                                <Card
-                                    hoverable
-                                    onClick={() => setSelectedOrderId(item.id)}
-                                    className="w-full shadow-sm border-gray-100 mb-2"
-                                    size="small"
-                                    title={<span className="font-bold">#{item.orderNo}</span>}
-                                    extra={<Tag color={getStatusColor(item.status)}>{item.status.replace(/_/g, ' ')}</Tag>}
-                                >
-                                    <div className="flex flex-col gap-1">
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-500">Device:</span>
-                                            <span className="font-medium">{item.deviceModel}</span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-500">Branch:</span>
-                                            <span>{item.branch?.name}</span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-500">Date:</span>
-                                            <span className="text-xs text-gray-400 mt-1">{formatDate(item.createdAt)}</span>
-                                        </div>
-                                    </div>
-                                </Card>
-                            </List.Item>
-                        )}
+                        pagination={{ pageSize: 12 }}
                     />
-                )}
-            </Card>
+                </Card>
+            )}
 
-            {/* Modals */}
-
+            {/* Mobile Cards */}
+            {isMobile && (
+                <div className="flex flex-col gap-3">
+                    {loading ? (
+                        <div className="text-center py-8 text-gray-400">Loading...</div>
+                    ) : filteredData.length === 0 ? (
+                        <div className="text-center py-8 text-gray-400">No orders found</div>
+                    ) : (
+                        filteredData.map((item) => (
+                            <Card
+                                key={item.id}
+                                hoverable
+                                onClick={() => setSelectedOrderId(item.id)}
+                                size="small"
+                                className="shadow-sm"
+                            >
+                                <div className="flex justify-between items-start mb-2">
+                                    <span className="font-bold text-base">{item.orderNo}</span>
+                                    <Tag color={getStatusColor(item.status)} className="ml-2">
+                                        {item.status.replace(/_/g, ' ')}
+                                    </Tag>
+                                </div>
+                                <div className="text-sm text-gray-600 space-y-1">
+                                    <div className="flex justify-between">
+                                        <span className="text-gray-400">Device:</span>
+                                        <span className="font-medium">{item.deviceModel}</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <span className="text-gray-400">Branch:</span>
+                                        <span>{item.branch?.name || '-'}</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <span className="text-gray-400">Date:</span>
+                                        <span className="text-gray-500 text-xs">{formatDate(item.createdAt)}</span>
+                                    </div>
+                                </div>
+                            </Card>
+                        ))
+                    )}
+                </div>
+            )}
 
             <RepairDetailModal
                 orderId={selectedOrderId}
@@ -199,3 +196,4 @@ export default function RepairsList() {
         </div>
     );
 }
+
